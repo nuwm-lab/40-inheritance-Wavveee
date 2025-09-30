@@ -11,7 +11,6 @@ class Line
         this.a2 = a2;
     }
 
-    // метод для задання коефіцієнтів
     public virtual void SetCoefficients(float a0, float a1, float a2)
     {
         this.a0 = a0;
