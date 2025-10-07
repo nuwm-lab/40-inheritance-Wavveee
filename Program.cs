@@ -4,7 +4,7 @@ class Line
 {
     protected float coefficientA, coefficientB, coefficientC; // Коефіцієнти для прямої
 
-    // Конструктор для ініціалізації коефіцієнтів прямої
+    // Конструктор для ініціалізації коефіцієнтів 
     public Line(float coefficientA, float coefficientB, float coefficientC)
     {
         this.coefficientA = coefficientA;
