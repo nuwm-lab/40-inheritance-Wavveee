@@ -1,87 +1,74 @@
 ﻿using System;
 
+using System;
+
 class Line
 {
-    protected float a0, a1, a2; // коефіцієнти
+    protected float coefficientA, coefficientB, coefficientC; // Коефіцієнти для прямої
 
-    public Line(float a0, float a1, float a2)
+    // Конструктор для ініціалізації коефіцієнтів 
+    public Line(float coefficientA, float coefficientB, float coefficientC)
     {
-        this.a0 = a0;
-        this.a1 = a1;
-        this.a2 = a2;
+        this.coefficientA = coefficientA;
+        this.coefficientB = coefficientB;
+        this.coefficientC = coefficientC;
     }
 
-    // метод для задання коефіцієнтів
-    public virtual void SetCoefficients(float a0, float a1, float a2)
+    // Метод для задання коефіцієнтів прямої
+    public virtual void SetCoefficients(float coefficientA, float coefficientB, float coefficientC)
     {
-        this.a0 = a0;
-        this.a1 = a1;
-        this.a2 = a2;
+        if (coefficientA == 0 && coefficientB == 0) // Перевірка на некоректні коефіцієнти
+        {
+            throw new ArgumentException("Коефіцієнти не можуть бути одночасно нульовими.");
+        }
+        
+        this.coefficientA = coefficientA;
+        this.coefficientB = coefficientB;
+        this.coefficientC = coefficientC;
     }
 
-    // метод для виведення коефіцієнтів
+    // Метод для виведення коефіцієнтів прямої
     public virtual void PrintCoefficients()
     {
-        Console.WriteLine($"Line: {a1}*x + {a2}*y + {a0} = 0");
+        Console.WriteLine($"Line: {coefficientB}*x + {coefficientC}*y + {coefficientA} = 0");
     }
 
-    // метод для перевірки належності точки
+    // Метод для перевірки належності точки прямій
     public bool Belongs(float x, float y)
     {
-        return Math.Abs(a1 * x + a2 * y + a0) < 1e-6; // перевірка з похибкою
+        return Math.Abs(coefficientB * x + coefficientC * y + coefficientA) < 1e-6; // Перевірка з похибкою
     }
 }
 
-class HyperPlane : Line // наслідуваний клас
+class HyperPlane : Line // Клас гіперплощини, що успадковує від Line
 {
-    private float a3, a4; // додаткові коефіцієнти
+    private float coefficientD, coefficientE; // Додаткові коефіцієнти для 4D простору
 
-    public HyperPlane(float a0, float a1, float a2, float a3, float a4)
-        : base(a0, a1, a2)  // констуктор базового класу
+    // Конструктор для ініціалізації коефіцієнтів гіперплощини
+    public HyperPlane(float coefficientA, float coefficientB, float coefficientC, float coefficientD, float coefficientE)
+        : base(coefficientA, coefficientB, coefficientC)  // Викликаємо конструктор базового класу
     {
-        this.a3 = a3;
-        this.a4 = a4;
+        this.coefficientD = coefficientD;
+        this.coefficientE = coefficientE;
     }
 
-    // перевантаження методу SetCoefficients
-    public void SetCoefficients(float a0, float a1, float a2, float a3, float a4)
+    // Перевантаження методу SetCoefficients для гіперплощини
+    public void SetCoefficients(float coefficientA, float coefficientB, float coefficientC, float coefficientD, float coefficientE)
     {
-        base.SetCoefficients(a0, a1, a2); // викликаємо метод базового класу
-        this.a3 = a3;
-        this.a4 = a4;
+        base.SetCoefficients(coefficientA, coefficientB, coefficientC); // Викликаємо метод базового класу для першої частини
+        this.coefficientD = coefficientD;
+        this.coefficientE = coefficientE;
     }
 
-    // перевантаження для виводу коефіцієнтів
+    // Перевантаження для виведення коефіцієнтів гіперплощини
     public override void PrintCoefficients()
     {
-        Console.WriteLine($"HyperPlane: {a1}*x1 + {a2}*x2 + {a3}*x3 + {a4}*x4 + {a0} = 0");
+        Console.WriteLine($"HyperPlane: {coefficientB}*x1 + {coefficientC}*x2 + {coefficientD}*x3 + {coefficientE}*x4 + {coefficientA} = 0");
     }
 
-    // метод для перевірки належності точки у 4D
+    // Метод для перевірки належності точки в 4D просторі
     public bool Belongs(float x1, float x2, float x3, float x4)
     {
-        return Math.Abs(a1 * x1 + a2 * x2 + a3 * x3 + a4 * x4 + a0) < 1e-6;
-    }
-}
-
-class Program
-{
-    static void Main()
-    {
-        // --- Пряма ---
-        Line line = new Line(2, 3, -6); // 2 + 3x - 6y = 0
-        line.PrintCoefficients();
-
-        Console.WriteLine(line.Belongs(1, 1)
-            ? "Point (1,1) belongs to the line"
-            : "Point (1,1) does NOT belong to the line");
-
-        // --- Гіперплощина ---
-        HyperPlane hyper = new HyperPlane(1, 2, 3, 4, 5); 
-        hyper.PrintCoefficients();
-
-        Console.WriteLine(hyper.Belongs(1, -1, 0, 0)
-            ? "Point (1,-1,0,0) belongs to the hyperplane"
-            : "Point (1,-1,0,0) does NOT belong to the hyperplane");
+        return Math.Abs(coefficientB * x1 + coefficientC * x2 + coefficientD * x3 + coefficientE * x4 + coefficientA) < 1e-6;
     }
 }
